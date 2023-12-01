@@ -1,18 +1,20 @@
-use axum::{http::StatusCode, routing::get, Router};
+use axum::{routing::get, Router, extract::Path};
+mod day_1;
 
-async fn hello_world() -> &'static str {
-    "Hello, world!"
-}
-
-async fn fake_error() -> Result<String, StatusCode> {
-    Err(StatusCode::INTERNAL_SERVER_ERROR)
+async fn day_1(
+    Path(nums): Path<String>
+) -> String {
+    let parsed_nums: Vec<i32> = 
+        nums.split("/")
+        .map(|c| c.parse::<i32>().unwrap_or(0))
+        .collect();
+    day_1::cube_the_bits(&parsed_nums)
 }
 
 #[shuttle_runtime::main]
 async fn main() -> shuttle_axum::ShuttleAxum {
     let router = Router::new()
-        .route("/", get(hello_world))
-        .route("/-1/error", get(fake_error));
+        .route("/1/*nums", get(day_1));
 
     Ok(router.into())
 }
