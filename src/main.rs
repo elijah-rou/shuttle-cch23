@@ -1,20 +1,13 @@
-use axum::{routing::get, Router, extract::Path};
+use axum::{routing::get, routing::post, Router};
 mod day_1;
-
-async fn day_1(
-    Path(nums): Path<String>
-) -> String {
-    let parsed_nums: Vec<i32> = 
-        nums.split("/")
-        .map(|c| c.parse::<i32>().unwrap_or(0))
-        .collect();
-    day_1::cube_the_bits(&parsed_nums)
-}
+mod day_4;
 
 #[shuttle_runtime::main]
 async fn main() -> shuttle_axum::ShuttleAxum {
     let router = Router::new()
-        .route("/1/*nums", get(day_1));
+        .route("/1/*nums", get(day_1::cube_the_bits))
+        .route("/4/strength", post(day_4::strength))
+        .route("/4/contest", post(day_4::contest));
 
     Ok(router.into())
 }
