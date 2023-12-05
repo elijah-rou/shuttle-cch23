@@ -1,9 +1,6 @@
-
 use axum::extract::Path;
 
-pub async fn cube_the_bits(
-    Path(nums): Path<String>
-) -> String {
+pub async fn cube_the_bits(Path(nums): Path<String>) -> String {
     nums.split("/")
         .map(|c| c.parse::<i32>().unwrap_or(0))
         .collect::<Vec<i32>>()
